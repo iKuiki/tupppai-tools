@@ -28,3 +28,15 @@
     tar xzf supervisor-3.2.0.tar.gz
     cd supervisor-3.2.0
     sudo python setup.py install
+
+5. 部署android打包环境
+    tar -zxvf android-sdk-linux.tgz
+    mv andrid-sdk-linux /var/local/android-sdk
+    然后设置路径
+    export ANDROID_HOME=/var/local/android-sdk
+    export PATH=$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools:$PATH
+
+    sudo apt-get install libncurses5:i386 libstdc++6:i386 zlib1g:i386
+    sudo apt-get install ia32-libs
+    sudo apt-get install openjdk-7-jdk
+
