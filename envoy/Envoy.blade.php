@@ -1,19 +1,28 @@
 @servers([ 'web-dev' => 'jq@loiter.us', 'apk-dev' => '127.0.0.1', 'apk-production' => '127.0.0.1', 'web-production1' => 'ubuntu@www.tupppai.com', 'web-production2' => 'ubuntu@www.tupppai.com'])
 
-@task('deploy', ['on' => 'web-dev', 'confirm' => false])
+@task('web-deploy', ['on' => 'web-dev', 'confirm' => false])
     cd /var/www/ps
     git pull origin develop
     php artisan migrate
     php artisan db:seed
+    cp -r public/src/dist/* public/
 @endtask
 
-@task('release', ['on' => 'apk-production', 'confirm' => false])
+@task('web-publish', ['on' => 'web-production1', 'confirm' => true])
+    cd /var/www/ps
+    git pull origin master
+    php artisan migrate
+    php artisan db:seed
+    cp -r public/src/dist/* public/
+@endtask
+
+@task('android-release', ['on' => 'apk-production', 'confirm' => true])
     cd /Users/junqiang/www/tupppai-android
     git pull origin master
     ./gradlew assembleRelease -Pandroid.injected.signing.store.file=/Users/junqiang/.gradle/keystore -Pandroid.injected.signing.store.password=psgod1234 -Pandroid.injected.signing.key.alias=psgod -Pandroid.injected.signing.key.password=psgod1234
 @endtask
 
-@task('package', ['on' => 'apk-dev', 'confirm' => false])
+@task('android-package', ['on' => 'apk-dev', 'confirm' => false])
     curl http://admin.loiter.us/push/fetchApk > /tmp/apk.exist
     cat /tmp/apk.exist | while read line
     do
