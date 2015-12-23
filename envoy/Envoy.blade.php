@@ -1,9 +1,9 @@
 @setup
-    $keystore   = '/Users/junqiang/.gradle/keystore';
     $keyPwd     = 'psgod1234';
     $keyAlias   = 'psgod';
-    $webPath    = '/var/www/ps';
-    $androidPath= '/Users/junqiang/www/tupppai-android';
+    $keystore   = '~/.gradle/keystore';
+    $webPath    = '~/www/ps';
+    $androidPath= '~/www/tupppai-android';
 @endsetup
 
 @servers([ 'web-dev' => 'jq@loiter.us', 'apk-dev' => '127.0.0.1', 'apk-production' => '127.0.0.1', 'web-production1' => 'ubuntu@www.tupppai.com', 'web-production2' => 'ubuntu@www.tupppai.com'])
