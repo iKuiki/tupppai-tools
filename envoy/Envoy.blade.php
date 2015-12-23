@@ -10,6 +10,7 @@
 
 @task('web-deploy', ['on' => 'web-dev', 'confirm' => false])
     cd {{$webPath}}
+    git checkout develop
     git pull origin develop
     php artisan migrate
     php artisan db:seed
@@ -18,9 +19,9 @@
 
 @task('web-publish', ['on' => 'web-production1', 'confirm' => true])
     cd {{$webPath}} 
+    git checkout master
     git pull origin master
     php artisan migrate
-    php artisan db:seed
     cp -r public/src/dist/* public/
 @endtask
 
