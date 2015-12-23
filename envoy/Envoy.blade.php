@@ -1,7 +1,15 @@
+@setup
+    $keystore   = '/Users/junqiang/.gradle/keystore';
+    $keyPwd     = 'psgod1234';
+    $keyAlias   = 'psgod';
+    $webPath    = '/var/www/ps';
+    $androidPath= '/Users/junqiang/www/tupppai-android';
+@endsetup
+
 @servers([ 'web-dev' => 'jq@loiter.us', 'apk-dev' => '127.0.0.1', 'apk-production' => '127.0.0.1', 'web-production1' => 'ubuntu@www.tupppai.com', 'web-production2' => 'ubuntu@www.tupppai.com'])
 
 @task('web-deploy', ['on' => 'web-dev', 'confirm' => false])
-    cd /var/www/ps
+    cd {{$webPath}}
     git pull origin develop
     php artisan migrate
     php artisan db:seed
@@ -9,7 +17,7 @@
 @endtask
 
 @task('web-publish', ['on' => 'web-production1', 'confirm' => true])
-    cd /var/www/ps
+    cd {{$webPath}} 
     git pull origin master
     php artisan migrate
     php artisan db:seed
@@ -17,9 +25,9 @@
 @endtask
 
 @task('android-release', ['on' => 'apk-production', 'confirm' => true])
-    cd /Users/junqiang/www/tupppai-android
+    cd {{$androidPath}}
     git pull origin master
-    ./gradlew assembleRelease -Pandroid.injected.signing.store.file=/Users/junqiang/.gradle/keystore -Pandroid.injected.signing.store.password=psgod1234 -Pandroid.injected.signing.key.alias=psgod -Pandroid.injected.signing.key.password=psgod1234
+    ./gradlew assembleRelease -Pandroid.injected.signing.store.file={{$keystore}} -Pandroid.injected.signing.store.password={{$keyPwd}} -Pandroid.injected.signing.key.alias={{$keyAlias}} -Pandroid.injected.signing.key.password={{$keyPwd}}
 @endtask
 
 @task('android-package', ['on' => 'apk-dev', 'confirm' => false])
@@ -29,14 +37,13 @@
         echo "$line"
         if [ "$line" = 1 ]; then
             echo 'remove all history apks'
-            rm -rf /Users/junqiang/www/tupppai-android/appStartActivity/build/outputs/apk/*
+            rm -rf {{$androidPath}}/appStartActivity/build/outputs/apk/*
             echo begin build apk
-            cd /Users/junqiang/www/tupppai-android
+            cd {{$androidPath}} 
             git checkout release
             git pull origin release
             ./gradlew assembleUmengRelease -Pandroid.injected.signing.store.file=/Users/junqiang/.gradle/keystore -Pandroid.injected.signing.store.password=psgod1234 -Pandroid.injected.signing.key.alias=psgod -Pandroid.injected.signing.key.password=psgod1234
-            #./gradlew assembleUmengRelease && curl http://admin.loiter.us/push/mailApk
-            scp /Users/junqiang/www/tupppai-android/appStartActivity/build/outputs/apk/tupppai_v1.0.4_umeng.apk jq@loiter.us:/var/www/ps/public/mobile/apk/tupai.apk
+            scp {{$androidPath}}/appStartActivity/build/outputs/apk/tupppai.apk jq@loiter.us:{{$webPath}}/public/mobile/apk/tupai.apk
             curl http://admin.loiter.us/push/mailApk
         else
             echo done
