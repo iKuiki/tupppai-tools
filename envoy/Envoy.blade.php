@@ -1,4 +1,5 @@
 @setup
+    $date       = date("YmdHis");
     $keyPwd     = 'psgod1234';
     $keyAlias   = 'psgod';
     $keystore   = '~/.gradle/keystore';
@@ -6,7 +7,7 @@
     $androidPath= '~/www/tupppai-android';
 @endsetup
 
-@servers([ 'web-dev' => 'jq@loiter.us', 'apk-dev' => '127.0.0.1', 'apk-production' => '127.0.0.1', 'web-production1' => 'ubuntu@www.tupppai.com', 'web-production2' => 'ubuntu@www.tupppai.com'])
+@servers([ 'web-dev' => 'jq@loiter.us', 'apk-dev' => '127.0.0.1', 'apk-production' => '127.0.0.1', 'web-production1' => 'root@www.tupppai.com', 'web-production2' => 'ubuntu@www.tupppai.com'])
 
 @task('web-deploy', ['on' => 'web-dev', 'confirm' => false])
     cd {{$webPath}}
@@ -18,7 +19,8 @@
 @endtask
 
 @task('web-publish', ['on' => 'web-production1', 'confirm' => true])
-    cd {{$webPath}} 
+    cd /var/www/ps 
+    cp -r /var/www/ps /var/www/ps_{{$date}}
     git checkout master
     git pull origin master
     php artisan migrate
