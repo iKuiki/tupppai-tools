@@ -29,8 +29,8 @@
 
 @task('android-release', ['on' => 'apk-production', 'confirm' => true])
     cd {{$androidPath}}
-    git pull origin master
-    ./gradlew assembleRelease -Pandroid.injected.signing.store.file={{$keystore}} -Pandroid.injected.signing.store.password={{$keyPwd}} -Pandroid.injected.signing.key.alias={{$keyAlias}} -Pandroid.injected.signing.key.password={{$keyPwd}}
+    git pull origin release
+    ./gradlew assembleRelease -Pandroid.injected.signing.store.file=/Users/junqiang/.gradle/keystore -Pandroid.injected.signing.store.password={{$keyPwd}} -Pandroid.injected.signing.key.alias={{$keyAlias}} -Pandroid.injected.signing.key.password={{$keyPwd}}
 @endtask
 
 @task('android-package', ['on' => 'apk-dev', 'confirm' => false])
