@@ -46,7 +46,7 @@ DODTIME=5                   # Time to wait for the server to die, in seconds
 if [ -f /etc/default/supervisor ] ; then
 	. /etc/default/supervisor
 fi
-DAEMON_OPTS="-c /var/www/ps/tools/supervisor/supervisord.conf $DAEMON_OPTS"
+DAEMON_OPTS="-c /data/tools/supervisor/supervisord.conf $DAEMON_OPTS"
 
 set -e
 

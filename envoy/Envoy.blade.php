@@ -19,10 +19,8 @@
 @endtask
 
 @task('web-publish', ['on' => 'web-production1', 'confirm' => true])
-    #if exist /data/backup
-    mv /var/www/ps_* /data/backup/
-    cp -r /var/www/ps /var/www/ps_{{$date}}
     cd /var/www/ps 
+    cp -r /var/www/ps /var/www/ps_{{$date}}
     git checkout master
     git pull origin master
     php artisan migrate
@@ -31,6 +29,27 @@
 
 @task('android-release', ['on' => 'apk-production', 'confirm' => true])
     cd {{$androidPath}}
-    git pull origin release
-    ./gradlew assembleRelease -Pandroid.injected.signing.store.file=/Users/junqiang/.gradle/keystore -Pandroid.injected.signing.store.password={{$keyPwd}} -Pandroid.injected.signing.key.alias={{$keyAlias}} -Pandroid.injected.signing.key.password={{$keyPwd}}
+    git pull origin master
+    ./gradlew assembleRelease -Pandroid.injected.signing.store.file={{$keystore}} -Pandroid.injected.signing.store.password={{$keyPwd}} -Pandroid.injected.signing.key.alias={{$keyAlias}} -Pandroid.injected.signing.key.password={{$keyPwd}}
+@endtask
+
+@task('android-package', ['on' => 'apk-dev', 'confirm' => false])
+    curl http://admin.loiter.us/push/fetchApk > /tmp/apk.exist
+    cat /tmp/apk.exist | while read line
+    do
+        echo "$line"
+        if [ "$line" = 1 ]; then
+            echo 'remove all history apks'
+            rm -rf {{$androidPath}}/appStartActivity/build/outputs/apk/*
+            echo begin build apk
+            cd {{$androidPath}} 
+            git checkout release
+            git pull origin release
+            ./gradlew assembleUmengRelease -Pandroid.injected.signing.store.file=/Users/junqiang/.gradle/keystore -Pandroid.injected.signing.store.password=psgod1234 -Pandroid.injected.signing.key.alias=psgod -Pandroid.injected.signing.key.password=psgod1234
+            scp {{$androidPath}}/appStartActivity/build/outputs/apk/tupppai.apk jq@loiter.us:{{$webPath}}/public/mobile/apk/tupai.apk
+            curl http://admin.loiter.us/push/mailApk
+        else
+            echo done
+        fi
+    done
 @endtask
