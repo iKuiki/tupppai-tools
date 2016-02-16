@@ -1,12 +1,4 @@
-<<<<<<< HEAD
-@setup
-    $date       = date("YmdHis");
-    $keyPwd     = 'psgod1234';
-    $keyAlias   = 'psgod';
-    $keystore   = '~/.gradle/keystore';
-    $webPath    = '~/www/ps';
-    $androidPath= '~/www/tupppai-android';
-@endsetup
+@include('config.php');
 
 @servers([ 'web-dev' => 'jq@www.loiter.us', 'apk-dev' => '127.0.0.1', 'apk-production' => '127.0.0.1', 'web-production1' => 'root@www.tupppai.com', 'web-production2' => 'ubuntu@www.tupppai.com'])
 
