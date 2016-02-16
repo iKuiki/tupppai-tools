@@ -1,0 +1,7 @@
+<?php
+    $date       = date("YmdHis");
+    $keyPwd     = 'xxx';
+    $keyAlias   = 'xxx';
+    $keystore   = '~/xxx/keystore';
+    $webPath    = '~/xxx';
+    $androidPath= '~/xxx';
