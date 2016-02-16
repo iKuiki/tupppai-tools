@@ -7,7 +7,7 @@
     $androidPath= '~/www/tupppai-android';
 @endsetup
 
-@servers([ 'web-dev' => 'jq@loiter.us', 'apk-dev' => '127.0.0.1', 'apk-production' => '127.0.0.1', 'web-production1' => 'root@www.tupppai.com', 'web-production2' => 'ubuntu@www.tupppai.com'])
+@servers([ 'web-dev' => 'jq@www.loiter.us', 'apk-dev' => '127.0.0.1', 'apk-production' => '127.0.0.1', 'web-production1' => 'root@www.tupppai.com', 'web-production2' => 'ubuntu@www.tupppai.com'])
 
 @task('web-deploy', ['on' => 'web-dev', 'confirm' => false])
     cd {{$webPath}}
