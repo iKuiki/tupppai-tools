@@ -13,7 +13,7 @@
 
 @task('web-publish', ['on' => 'web-production1', 'confirm' => true])
     cd /var/www/ps 
-    cp -r /var/www/ps /var/www/ps_{{$date}}
+    cp -r /var/www/ps /data/backup/ps_{{$date}}
     git checkout master
     git pull origin master
     php artisan migrate
