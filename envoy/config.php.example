@@ -5,3 +5,15 @@
     $keystore   = '~/xxx/keystore';
     $webPath    = '~/xxx';
     $androidPath= '~/xxx';
+
+<?php
+$date       = date("YmdHis");
+$keyPwd     = '';
+$keyAlias   = '';
+$keystore   = '~/.gradle/keystore';
+$webPath    = '';
+$backPath   = '';
+$androidPath= '';
+
+$tupppaiPath= 'ps';
+$designPath = 'tupppai-design';
