@@ -1,6 +1,6 @@
 @include('config.php');
 
-@servers([ 'web-dev' => 'jq@tapi.tupppai.com', 'apk-dev' => '127.0.0.1', 'apk-production' => '127.0.0.1', 'web-1' => 'ubuntu@www.tupppai.com', 'web-2' => 'ubuntu@www.qiupsdashen.com', 'web-3' => 'ubuntu@www.chupinlm.com'])
+@servers([ 'web-dev' => 'jq@tapi.tupppai.com', 'apk-dev' => '127.0.0.1', 'apk-production' => '127.0.0.1', 'web-1' => 'ubuntu@119.29.103.159', 'web-2' => 'ubuntu@119.29.83.98', 'web-3' => 'ubuntu@119.29.165.135'])
 
 @task('web-deploy', ['on' => 'web-dev', 'confirm' => false])
     cd {{$webPath.$tupppaiPath}}
@@ -25,7 +25,7 @@
     php artisan migrate
 @endtask
 
-@task('design-publish', ['on' => ['web-1', 'web-2', 'web-3'], 'confirm' => true])
+@task('design-publish', ['on' => ['web-1'], 'confirm' => true])
     cd {{$webPath.$designPath}}
     cp -r {{$webPath.$designPath}} {{$backPath}}/{{$designPath}}_{{$date}}
     git checkout master
