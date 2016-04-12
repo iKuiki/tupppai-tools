@@ -8,7 +8,6 @@
     git pull origin develop
     php artisan migrate
     php artisan db:seed
-    cp -r public/src/dist/* public/
 @endtask
 
 @task('web-publish', ['on' => 'web-production1', 'confirm' => true])
@@ -17,13 +16,12 @@
     git checkout master
     git pull origin master
     php artisan migrate
-    cp -r public/src/dist/* public/
 @endtask
 
 @task('design-deploy', ['on' => 'web-dev', 'confirm' => true])
     cd {{$webPath.$designPath}}
-    git checkout master
-    git pull origin master
+    git checkout develop
+    git pull origin develop
     php artisan migrate
 @endtask
 
