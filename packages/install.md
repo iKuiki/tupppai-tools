@@ -12,7 +12,7 @@
     sudo apt-get install beanstalkd
     cd beanstalkd-1.10
     make
-    ln -s /var/www/ps/tools/packages/beanstalkd-1.10/beanstalkd /usr/bin/beanstalkd
+    ln -s /data/tools/packages/beanstalkd-1.10/beanstalkd /usr/bin/beanstalkd
 
 3. 安装 setuptools for python
     从官网下载：https://pypi.python.org/pypi/setuptools#downloads
