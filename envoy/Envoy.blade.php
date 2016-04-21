@@ -25,12 +25,20 @@
     php artisan migrate
 @endtask
 
-@task('design-publish', ['on' => ['web-1'], 'confirm' => true])
+@task('design-publish', ['on' => ['web-1', 'web-2', 'web-3'], 'confirm' => true])
     cd {{$webPath.$designPath}}
+    php artisan down
     cp -r {{$webPath.$designPath}} {{$backPath}}/{{$designPath}}_{{$date}}
     git checkout master
     git pull origin master
+    #only for new app
+    #cd vendor; composer install --optimize-autoloader --no-dev; composer dump-autoload --optimize; cd -;
+    php artisan route:clear
+    php artisan route:cache
     php artisan migrate
+    php artisan clear-compiled
+    php artisan optimize
+    php artisan up
 @endtask
 
 @task('android-release', ['on' => 'apk-production', 'confirm' => true])
