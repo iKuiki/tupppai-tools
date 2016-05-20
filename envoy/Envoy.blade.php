@@ -13,6 +13,7 @@
 @task('web-publish', ['on' => ['web-1', 'web-2', 'web-3'], 'confirm' => true])
     cd {{$webPath.$tupppaiPath}}
     cp -r {{$webPath.$tupppaiPath}} {{$backPath}}/{{$tupppaiPath}}_{{$date}}
+    rm -r {{$backPath}}/{{$tupppaiPath}}_{{$date}}/.git
     git checkout master
     git pull origin master
     php artisan migrate
@@ -27,8 +28,9 @@
 
 @task('design-publish', ['on' => ['web-1', 'web-2', 'web-3'], 'confirm' => true])
     cd {{$webPath.$designPath}}
-    php artisan down
     cp -r {{$webPath.$designPath}} {{$backPath}}/{{$designPath}}_{{$date}}
+    rm -r {{$backPath}}/{{$designPath}}_{{$date}}/.git
+    php artisan down
     git checkout master
     git pull origin master
     #only for new app
