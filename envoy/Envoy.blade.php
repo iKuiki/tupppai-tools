@@ -1,23 +1,46 @@
 @include('config.php');
 
-@servers([ 'web-dev' => 'jq@www.loiter.us', 'apk-dev' => '127.0.0.1', 'apk-production' => '127.0.0.1', 'web-production1' => 'root@www.tupppai.com', 'web-production2' => 'ubuntu@www.tupppai.com'])
+@servers([ 'web-dev' => 'jq@tapi.tupppai.com', 'apk-dev' => '127.0.0.1', 'apk-production' => '127.0.0.1', 'web-1' => 'ubuntu@119.29.103.159', 'web-2' => 'ubuntu@119.29.83.98', 'web-3' => 'ubuntu@119.29.165.135'])
 
 @task('web-deploy', ['on' => 'web-dev', 'confirm' => false])
-    cd {{$webPath}}
+    cd {{$webPath.$tupppaiPath}}
     git checkout develop
     git pull origin develop
     php artisan migrate
     php artisan db:seed
-    cp -r public/src/dist/* public/
 @endtask
 
-@task('web-publish', ['on' => 'web-production1', 'confirm' => true])
-    cd /var/www/ps 
-    cp -r /var/www/ps /var/www/ps_{{$date}}
+@task('web-publish', ['on' => ['web-1', 'web-2', 'web-3'], 'confirm' => true])
+    cd {{$webPath.$tupppaiPath}}
+    cp -r {{$webPath.$tupppaiPath}} {{$backPath}}/{{$tupppaiPath}}_{{$date}}
+    rm -r {{$backPath}}/{{$tupppaiPath}}_{{$date}}/.git
     git checkout master
     git pull origin master
     php artisan migrate
-    cp -r public/src/dist/* public/
+@endtask
+
+@task('design-deploy', ['on' => 'web-dev', 'confirm' => true])
+    cd {{$webPath.$designPath}}
+    git checkout develop
+    git pull origin develop
+    php artisan migrate
+@endtask
+
+@task('design-publish', ['on' => ['web-1', 'web-2', 'web-3'], 'confirm' => true])
+    cd {{$webPath.$designPath}}
+    cp -r {{$webPath.$designPath}} {{$backPath}}/{{$designPath}}_{{$date}}
+    rm -r {{$backPath}}/{{$designPath}}_{{$date}}/.git
+    php artisan down
+    git checkout master
+    git pull origin master
+    #only for new app
+    #cd vendor; composer install --optimize-autoloader --no-dev; composer dump-autoload --optimize; cd -;
+    php artisan route:clear
+    php artisan route:cache
+    php artisan migrate
+    php artisan clear-compiled
+    php artisan optimize
+    php artisan up
 @endtask
 
 @task('android-release', ['on' => 'apk-production', 'confirm' => true])
